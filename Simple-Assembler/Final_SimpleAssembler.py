@@ -2,11 +2,11 @@ import sys
 
 lineCount = 0  # Counting number of lines entered till now
 cmd_list = [] #List where commads readd from file are stored
-variables = []
-commands = []
-labels = {}
-instrn_count = 0 
-parentstr=""
+variables = [] # List to store variable names
+commands = []# List to store commands
+labels = {} # Dictionary to store label names and their line numbers
+instrn_count = 0  # Instruction count
+parentstr=""  # Parent string for assembling instructions
 
 # f1=open("machine_code_ouput.txt","w")
 opcode = {
@@ -54,6 +54,7 @@ registersF = {
     "R6": "110",
     "FLAGS": "111",
 }
+# Function to check if a command is valid
 
 def isValidCmd(line: str):
     cmd = (line.strip()).split()[0]
@@ -63,6 +64,7 @@ def isValidCmd(line: str):
         return True
     return False
 
+# Function to check if a variable name is duplicate
 
 def duplicateVar(varName: str, variables: list):
     if varName in variables:
@@ -70,12 +72,14 @@ def duplicateVar(varName: str, variables: list):
     else:
         return False
 
+# Function to check if a label name is duplicate
 
 def duplicateLabel(labelName: str):
     for label in labels.keys():
         if label == labelName:
             return True
 
+# Function to check label validity
 
 def labelValidity(labelName: str):
     if duplicateLabel(labelName):
@@ -87,6 +91,7 @@ def labelValidity(labelName: str):
     else:
         return True
 
+# Function to check variable name validity
 
 def varNameValidity(varName: str):
     if duplicateVar(varName,variables):
@@ -100,12 +105,14 @@ def varNameValidity(varName: str):
         return False
     return True
 
+# Function to check register validity
 
 def regValidity(reg: str):
     if reg in registersF.keys():
         return True
     return False
 
+# Function to check immediate value validity
 
 def immediateValidity(imm: str):
     imm = list(imm)
@@ -118,6 +125,7 @@ def immediateValidity(imm: str):
             return False
     return False
 
+# Function to check length of command
 
 def lenChecker(line: str):
     if isValidCmd(line) or line[-1] == ":":
@@ -146,6 +154,7 @@ def lenChecker(line: str):
                 sys.stdout.write("Label isn't alphanumeric")
     return False
 
+# Function to check validity of memory address
 
 def isValidMemAddr(line: str):
     cmd = line.split()[0]
@@ -166,7 +175,7 @@ def isValidMemAddr(line: str):
 
     return False
 
-
+# Function to check if a line is valid
 
 def isLineValid(line: str):
     if lenChecker(line):
@@ -226,6 +235,7 @@ org_cmd_list = [line.strip() for line in cmd_list]
 cmd_list = [line for line in org_cmd_list if line != ""]
 # f.close()
 #print(cmd_list) #Extra
+# Main function to split and process input
 
 def splitter():
     parentstr = ""
@@ -337,7 +347,7 @@ def splitter():
     
     sys.stdout.write(parentstr)   
         
-        
+# Helper function to convert a number to 7-bit binary        
 
 def make_7bit_binary(num):
     con_num = []
